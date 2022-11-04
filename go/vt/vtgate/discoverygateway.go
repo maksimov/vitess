@@ -149,6 +149,7 @@ func NewDiscoveryGateway(ctx context.Context, hc discovery.LegacyHealthCheck, se
 		dg.tabletsWatchers = append(dg.tabletsWatchers, ctw)
 	}
 	dg.QueryService = queryservice.Wrap(nil, dg.withRetry)
+
 	return dg
 }
 
@@ -296,6 +297,13 @@ func (dg *DiscoveryGateway) withRetry(ctx context.Context, target *querypb.Targe
 		}
 
 		tablets := dg.tsc.GetHealthyTabletStats(target.Keyspace, target.Shard, target.TabletType)
+
+		log.Infof("[Discovery Gateway] %d number of healthy tablets found for keyspace: %s, shard: %s, tablet_type: %s",
+			len(tablets),
+			target.Keyspace,
+			target.Shard,
+			target.TabletType,
+		)
 
 		// temporary hack to enable REPLICA type queries to address both REPLICA tablets and RDONLY tablets
 		// original commit - https://github.com/tinyspeck/vitess/pull/166/commits/2552b4ce25a9fdb41ff07fa69f2ccf485fea83ac

@@ -260,6 +260,7 @@ func (tc *LegacyTabletStatsCache) StatsUpdate(ts *LegacyTabletStats) {
 		allArray = make([]*LegacyTabletStats, 0, len(e.all))
 		for _, s := range e.all {
 			allArray = append(allArray, s)
+			log.Infof("[Discovery Gateway] Adding tablet %s, to healthy list", s.Tablet.Hostname)
 		}
 		e.healthy = FilterLegacyStatsByReplicationLag(allArray)
 	}

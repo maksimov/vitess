@@ -496,6 +496,7 @@ func (hc *HealthCheckImpl) recomputeHealthy(key keyspaceShardTabletType) {
 		// Only tablets in same cell / cellAlias are included in healthy list.
 		if hc.isIncluded(s.Tablet.Type, s.Tablet.Alias) {
 			allArray = append(allArray, s)
+			log.Infof("[Tablet Gateway] Adding tablet %s, to healthy list", s.Tablet.Hostname)
 		}
 	}
 	hc.healthy[key] = FilterStatsByReplicationLag(allArray)

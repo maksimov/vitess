@@ -280,6 +280,13 @@ func (gw *TabletGateway) withRetry(ctx context.Context, target *querypb.Target, 
 		}
 		gw.shuffleTablets(gw.localCell, tablets)
 
+		log.Infof("[Tablet Gateway] %d number of healthy tablets found for keyspace: %s, shard: %s, tablet_type: %s",
+			len(tablets),
+			target.Keyspace,
+			target.Shard,
+			target.TabletType,
+		)
+
 		var th *discovery.TabletHealth
 		// skip tablets we tried before
 		for _, t := range tablets {
