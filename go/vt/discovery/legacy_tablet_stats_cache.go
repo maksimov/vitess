@@ -202,8 +202,8 @@ func (tc *LegacyTabletStatsCache) getAliasByCell(cell string) string {
 // StatsUpdate is part of the LegacyHealthCheckStatsListener interface.
 func (tc *LegacyTabletStatsCache) StatsUpdate(ts *LegacyTabletStats) {
 	if ts.Target.TabletType != topodatapb.TabletType_PRIMARY &&
-		ts.Tablet.Alias.Cell != tc.cell &&
-		tc.getAliasByCell(ts.Tablet.Alias.Cell) != tc.getAliasByCell(tc.cell) {
+		ts.Tablet.Alias.Cell != tc.cell {
+		log.Infof("[Discovery Gateway] Skippig tablet %s in cell %s, for healthy list in cell %s", ts.Tablet.Hostname, ts.Tablet.Alias.Cell, tc.cell)
 		// this is for a non-primary tablet in a different cell and a different alias, drop it
 		return
 	}
